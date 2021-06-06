@@ -8,12 +8,15 @@ import com.imooc.service.combine.HeadLineShopCategoryCombineService;
 import com.imooc.service.solo.HeadLineService;
 import com.imooc.service.solo.ShopCategoryService;
 import org.simplefrawork.core.annotation.Service;
+import org.simplefrawork.inject.annotation.Autowired;
 
 import java.util.List;
 
 @Service
 public class HeadLineShopCategoryCombineServiceImpl implements HeadLineShopCategoryCombineService {
+    @Autowired(name = "HeadLineServiceImpl")
     private HeadLineService headLineService;
+    @Autowired(name = "ShopCategoryServiceImpl")
     private ShopCategoryService shopCategoryService;
     @Override
     public Result<MainPageInfoDTO> getMainPageInfo() {

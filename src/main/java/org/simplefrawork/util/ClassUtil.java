@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
@@ -59,8 +61,8 @@ public class ClassUtil {
 
     public static <T> T newInstance(Class<?> clazz) {
         try {
-            return (T)clazz.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
+            return (T)clazz.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -72,6 +74,17 @@ public class ClassUtil {
         clazzName = clazzName.substring(0, clazzName.lastIndexOf("."));
         Class targetClazz = loadClass(clazzName);
         emptyClassSet.add(targetClazz);
+
+    }
+
+    public static void setField (Field field, Object target, Object value, boolean accessible) {
+        field.setAccessible(accessible);
+        try {
+            field.set(target, value);
+        } catch (IllegalAccessException e) {
+            log.error("setFiled error:", e);
+            throw new RuntimeException(e);
+        }
 
     }
 

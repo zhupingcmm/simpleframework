@@ -4,12 +4,14 @@ import com.imooc.entity.bo.ShopCategory;
 import com.imooc.entity.dto.Result;
 import com.imooc.service.solo.ShopCategoryService;
 import org.simplefrawork.core.annotation.Controller;
+import org.simplefrawork.inject.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 @Controller
 public class ShopCategoryOperationController {
+    @Autowired(name = "ShopCategoryServiceImpl")
     private ShopCategoryService service;
 
     public Result<Boolean> addShopCategory(HttpServletRequest req, HttpServletResponse res){

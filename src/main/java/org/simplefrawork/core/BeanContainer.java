@@ -10,10 +10,7 @@ import org.simplefrawork.core.annotation.Service;
 import org.simplefrawork.util.ClassUtil;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -31,7 +28,7 @@ public class BeanContainer {
         if (instance == null) {
             synchronized (BeanContainer.class) {
                 if (instance == null) {
-                    return new BeanContainer();
+                    instance =  new BeanContainer();
                 }
             }
         }
@@ -65,6 +62,54 @@ public class BeanContainer {
             }
         }
         loaded = true;
+    }
+
+    public Object addBean (Class<?> clazz, Object instance) {
+        return beanMap.put(clazz, instance);
+    }
+
+    public Object deleteBean (Class<?> clazz) {
+        return beanMap.remove(clazz);
+    }
+
+    public Set<Class<?>> getClasses () {
+        return beanMap.keySet();
+    }
+
+    public Set<Object> getBeans () {
+        return new HashSet<>(beanMap.values());
+    }
+
+    public Object getBean (Class<?> clazz) {
+        return beanMap.get(clazz);
+    }
+
+    public Set<Class<?>> getClassesByAnnotation (Class<? extends Annotation> annotation) {
+        Set<Class<?>> classSet = getClasses();
+
+        Set<Class<?>> classes = new HashSet<>();
+
+        for (Class<?> clazz : classSet) {
+            if (clazz.isAnnotationPresent(annotation)) {
+                classes.add(clazz);
+            }
+        }
+        return classes;
+
+    }
+
+    public Set<Class<?>> getClassesBySuper (Class<?> interfaceOrClass) {
+        Set<Class<?>> keySet = getClasses();
+
+        Set<Class<?>> classSet = new HashSet<>();
+
+        for (Class<?> clazz : keySet) {
+            if (interfaceOrClass.isAssignableFrom(clazz) && !clazz.equals(interfaceOrClass)) {
+                classSet.add(clazz);
+            }
+        }
+
+        return classSet;
     }
 
 }
